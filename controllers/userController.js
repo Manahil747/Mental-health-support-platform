@@ -26,4 +26,34 @@ const updateProfile= async(req,res)=>{
 }
 
 
-module.exports={getProfile, updateProfile};
+//Delete user
+const deleteAccount= async(req,res)=>{
+    try{
+        const deleteUser= await User.findByIdAndDelete(req.user.userId);
+        res.status(200).json(responseModel({statusCode:200, success:true,message:'Deleted successfuly'}));
+    }
+    catch(err){
+        res.status(400).json(responseModel({statusCode:404, success:false, message:'User data not deleted:('}))
+    }
+}
+
+//change password
+const changePassword=async(req,res)=>{
+    try{
+        const {password, newPassword}= req.body;
+        const userPassword= await User.findById(req.user.userId);
+        const isMatch= await bcrypt.compare(password, userPassword.password);
+        if(!isMatch){
+            return res.status(400).json(responseModel({statusCode:400, success:false, message:'password not matched'}));
+        }
+        const hashedPassword= await bcrypt.hash(newPassword, 10);
+        const userPasswords= await User.findByIdAndUpdate(userPassword._id, {password:hashedPassword}, {new:true});
+       res.status(200).json(responseModel({statusCode:200, success:true, data:userPasswords, message:'Password change successfully!'}));
+    }
+    catch(err){
+        res.status(400).json(responseModel({statusCode:404, success:false, message:'Something went wrong:('}))
+    }
+}
+
+
+module.exports={getProfile, updateProfile, deleteAccount, changePassword};
