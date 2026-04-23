@@ -4,8 +4,8 @@ const {bookAppointment, getUserAppointment, cancelAppointment}= require("../cont
 const authMiddleware=require("../middleware/authMiddleware");
 
 //Appointment Routes
-router.post("/", authMiddleware, bookAppointment);
-router.get("/", authMiddleware, getUserAppointment);
-router.put("/", authMiddleware, cancelAppointment);
+router.post("/book", authMiddleware, bookAppointment);
+router.get("/all", authMiddleware, getUserAppointment);
+router.put("/cancel/:id", authMiddleware, cancelAppointment);
 
 module.exports=router;
