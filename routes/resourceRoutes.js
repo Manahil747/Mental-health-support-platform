@@ -1,10 +1,11 @@
 const express=require('express');
 const router=express.Router();
-const {createQuiz, getAllQuizzes, submitQuiz}= require('../controllers/quizController');
+const {addResource, getAllResources, deleteResource}= require('../controllers/resourceController');
 const authMiddleware=require('../middleware/authMiddleware');
+const {adminMiddleware}=require("../middleware/adminMiddleware");
 
-router.post('/create', authMiddleware, createQuiz);
-router.get('/all', authMiddleware ,getAllQuizzes);
-router.post('/submit',authMiddleware,submitQuiz);
+router.post('/add',authMiddleware, adminMiddleware,addResource);
+router.get('/all', authMiddleware ,getAllResources);
+router.delete('/delete/:id', authMiddleware, adminMiddleware, deleteResource);
 
 module.exports=router;

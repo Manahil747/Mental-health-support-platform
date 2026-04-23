@@ -1,5 +1,4 @@
 const express=require("express");
-const mongoose=require("mongoose");
 const dotenv=require('dotenv');
 dotenv.config();
 const app=express();
@@ -12,6 +11,7 @@ const mood=require('./routes/moodRoutes');
 const quiz=require('./routes/quizRoutes');
 const appointment=require("./routes/appointmentRoutes");
 const therapist=require("./routes/therapistRoutes");
+const resource = require("./routes/resourceRoutes");
 
 
 connectDB();
@@ -22,6 +22,7 @@ app.use('/mood', mood);
 app.use('/quiz', quiz);
 app.use('/appointment', appointment);
 app.use("/therapist", therapist);
+app.use('/resource', resource);
 
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
