@@ -12,6 +12,7 @@ const quiz=require('./routes/quizRoutes');
 const appointment=require("./routes/appointmentRoutes");
 const therapist=require("./routes/therapistRoutes");
 const resource = require("./routes/resourceRoutes");
+const chatAI= require("./routes/chatRoutes");
 
 
 connectDB();
@@ -23,6 +24,7 @@ app.use('/quiz', quiz);
 app.use('/appointment', appointment);
 app.use("/therapist", therapist);
 app.use('/resource', resource);
+app.use("/chatAI", chatAI);
 
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
