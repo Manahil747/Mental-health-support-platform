@@ -30,7 +30,6 @@ const sendMessage = async(req, res) => {
         return res.status(201).json(responseModel({statusCode: 201, success: true, data: saveChat, message: 'Chat saved successfully:)'}));
     }
     catch(err) {
-        console.log("Error:", err);
         res.status(400).json(responseModel({statusCode: 400, success: false, message: err.message}));
     }
 }

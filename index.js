@@ -3,6 +3,19 @@ const dotenv=require('dotenv');
 dotenv.config();
 const app=express();
 app.use(express.json());
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
+app.use(helmet()); //for securing headers
+// 15 minute mein max 100 requests
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100,
+    message: 'Too many requests, please try again later'
+});
+app.use(mongoSanitize());
+app.use(rateLimit());
+
 const PORT= process.env.PORT || 5000;
 const connectDB=require('./config/db');
 const auth=require('./routes/authRoutes');
@@ -13,6 +26,7 @@ const appointment=require("./routes/appointmentRoutes");
 const therapist=require("./routes/therapistRoutes");
 const resource = require("./routes/resourceRoutes");
 const chatAI= require("./routes/chatRoutes");
+const dashboard= require("./routes/dashboardRoutes");
 
 
 connectDB();
@@ -25,6 +39,7 @@ app.use('/appointment', appointment);
 app.use("/therapist", therapist);
 app.use('/resource', resource);
 app.use("/chatAI", chatAI);
+app.use("/dashboard", dashboard);
 
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
