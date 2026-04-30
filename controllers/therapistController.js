@@ -10,7 +10,8 @@ const addTherapist = async(req,res)=>{
      return res.status(200).json(responseModel({statusCode:200, success:true, data:TherapistAdd, message:'Therapist Data added successfully:('}));
     }
     catch(err){
-     res.status(400).json(responseModel({statusCode:400, success:false, message:'Therapist not added:('}));
+        console.log(err);
+     res.status(400).json(responseModel({statusCode:400, success:false, message:'Therapist not added:(', err:err.message}));
     }
 }
 
