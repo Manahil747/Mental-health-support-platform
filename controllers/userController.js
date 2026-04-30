@@ -1,7 +1,7 @@
 const User= require('../models/user');
 const responseModel=require('../utils/responseModel');
 
-
+//Get Profile
 const getProfile= async(req,res)=>{
     try{
         const user= await User.findById(req.user.userId .select('-password'));
@@ -13,6 +13,7 @@ const getProfile= async(req,res)=>{
     }
 }
 
+//Update UserProfile
 const updateProfile= async(req,res)=>{
     try{
         const {name, age, gender}= req.body;

@@ -18,7 +18,7 @@ const bookAppointment=async(req,res)=>{
             'Appointment Booked Successfully!',
             `Hello ${user.name}! Your appointment with ${therapist.name} is booked on ${date} at ${time}.`
         );
-
+        // here we can test it using therapistId & date & time.... token must be taken of admin so we can access it
         return res.status(201).json(responseModel({statusCode:201, success:true, data:newAppointment ,message:'Appointment booked sucessfully:)'}))
     }
     catch(err){
