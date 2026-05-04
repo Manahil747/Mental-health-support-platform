@@ -4,7 +4,7 @@ const responseModel=require('../utils/responseModel');
 //Get Profile
 const getProfile= async(req,res)=>{
     try{
-        const user= await User.findById(req.user.userId .select('-password'));
+        const user= await User.findById(req.user.userId) .select('-password');
         res.status(200).json(responseModel({statusCode:200, success:true,data:user }));
 
     }
@@ -17,7 +17,7 @@ const getProfile= async(req,res)=>{
 const updateProfile= async(req,res)=>{
     try{
         const {name, age, gender}= req.body;
-        const updatedUser= await User.findByIdAndUpdate(req.user.userId, {name, age, gender}, {new:true} .select('-password'));
+        const updatedUser= await User.findByIdAndUpdate(req.user.userId, {name, age, gender}, {new:true}) .select('-password');
 
         res.status(200).json(responseModel({statusCode:200, success:true, data:updatedUser, message:'Updated successfuly'}));
     }

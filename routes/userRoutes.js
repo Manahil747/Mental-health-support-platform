@@ -5,7 +5,7 @@ const authMiddleware=require('../middleware/authMiddleware');
 
 
 router.get('/profile', authMiddleware, getProfile );
-router.put('/update', authMiddleware, updateProfile);
+router.put('/profile', authMiddleware, updateProfile); 
 router.delete('/delete', authMiddleware, deleteAccount);
 router.put('/change-password', authMiddleware, changePassword);
 

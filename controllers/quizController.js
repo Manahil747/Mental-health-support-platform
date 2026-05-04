@@ -1,5 +1,5 @@
 const Quiz=require('../models/quiz');
-const Result =require('../models/quizResult');
+const Results =require('../models/quizResult');
 const responseModel=require('../utils/responseModel');
 
 
@@ -44,7 +44,7 @@ const submitQuiz= async(req,res)=>{
        if(percentage<=40) interpretation='Low'
        else if(percentage <= 70) interpretation = "Moderate"
        else interpretation = "High"
-       const quizResult=new Result({userId: req.user.userId, quizId, score: totalScore, interpretation});
+       const quizResult=new Results({userId: req.user.userId, quizId, score: totalScore, interpretation});
        await quizResult.save();
        res.status(200).json(responseModel({statusCode: 200, success: true, data:quizResult, message:'Quiz result save successfully:)'}));
 
@@ -54,4 +54,31 @@ const submitQuiz= async(req,res)=>{
     }
 }
 
-module.exports= {createQuiz, getAllQuizzes, submitQuiz };
+const saveQuizResult = async (req, res) => {
+    try {
+        const { score, interpretation } = req.body;
+        const result = new Results({
+            userId: req.user.userId,
+            quizId: null,
+            score,
+            interpretation
+        });
+        await result.save();
+        res.status(201).json(responseModel({statusCode: 201, success: true, data: result, message: 'Result saved!'}));
+    } catch (err) {
+        res.status(400).json(responseModel({statusCode: 400, success: false, message: err.message}));
+    }
+};
+
+const getQuizHistory = async (req, res) => {
+    try {
+        const results = await Results.find({userId: req.user.userId}).sort({createdAt: -1});
+        res.status(200).json(responseModel({statusCode: 200, success: true, data: results, message: 'Quiz history fetched!'}));
+    } catch (err) {
+        res.status(400).json(responseModel({statusCode: 400, success: false, message: err.message}));
+    }
+};
+
+
+module.exports = {createQuiz, getAllQuizzes, submitQuiz, saveQuizResult, getQuizHistory};
+

@@ -3,6 +3,11 @@ const dotenv=require('dotenv');
 dotenv.config();
 const app=express();
 app.use(express.json());
+const cors = require('cors');
+app.use(cors({
+    origin: 'http://localhost:5173', // Vite ka default port
+    credentials: true
+}));
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 app.use(helmet()); //for securing headers
