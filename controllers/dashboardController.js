@@ -11,7 +11,7 @@ const getDashboard= async(req,res)=>{
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     
     const [moodData, quizData, appointment]= await Promise.all([
-           Mood.find({userId, date: {$gte: sevenDaysAgo}}),
+           Mood.find({userId}),   //, date: {$gte: sevenDaysAgo}
            quizResult.findOne({userId}).sort({date: -1}),
            Appointment. find({userId, status:'booked'})
     ])
