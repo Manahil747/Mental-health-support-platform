@@ -1,4 +1,5 @@
 const User= require('../models/user');
+const upload = require('../config/multerconfig');
 const responseModel=require('../utils/responseModel');
 
 //Get Profile
@@ -55,6 +56,26 @@ const changePassword=async(req,res)=>{
         res.status(400).json(responseModel({statusCode:404, success:false, message:'Something went wrong:('}))
     }
 }
+// upload photo
+
+const uploadProfilePhoto = async (req, res) => {
+    try {
+        if(!req.file){
+            return res.status(400).json(responseModel({statusCode: 400, success: false, message: 'No file uploaded'}));
+        }
+        const photoPath = `/uploads/${req.file.filename}`;
+        const user = await User.findByIdAndUpdate(
+            req.user.userId, 
+            {photo: photoPath}, 
+            {new: true}
+        ).select('-password');
+        
+        res.status(200).json(responseModel({statusCode: 200, success: true, data: user, message: 'Photo uploaded successfully!'}));
+    } catch(err) {
+        res.status(400).json(responseModel({statusCode: 400, success: false, message: err.message}));
+    }
+};
 
 
-module.exports={getProfile, updateProfile, deleteAccount, changePassword};
+
+module.exports={getProfile, updateProfile, deleteAccount, changePassword, uploadProfilePhoto};

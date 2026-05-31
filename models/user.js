@@ -6,6 +6,7 @@ const userData=new mongoose.Schema({
     password:{type:String, required:true},
     role:{type:String, enum:['user', 'admin', 'therapist'], default:'user'},
     age:{type:Number, min:10},
+    photo: {type: String, default: ''},
     gender:{type:String, required:true, enum:['male','female','other'] }
 }, {timestamps:true});
 module.exports = mongoose.model("User",userData);

@@ -1,4 +1,5 @@
 const responseModel=require("../utils/responseModel");
+const upload = require('../config/multerconfig');
 const Therapist= require('../models/therapist');
 
 //addTherapist
@@ -40,6 +41,24 @@ const getTherapistById= async(req,res)=>{
     res.status(404).json(responseModel({statusCode:404, success:false, message:'Therapist not found:('}));
     }
 }
+//upload photo
+
+const uploadTherapistPhoto = async (req, res) => {
+    try {
+        if(!req.file){
+            return res.status(400).json(responseModel({statusCode: 400, success: false, message: 'No file uploaded'}));
+        }
+        const photoPath = `/uploads/${req.file.filename}`;
+        const therapist = await Therapist.findByIdAndUpdate(
+            req.params.id,
+            {photo: photoPath},
+            {new: true}
+        );
+        res.status(200).json(responseModel({statusCode: 200, success: true, data: therapist, message: 'Photo uploaded successfully!'}));
+    } catch(err) {
+        res.status(400).json(responseModel({statusCode: 400, success: false, message: err.message}));
+    }
+};
 
 
-module.exports={addTherapist, getAllTherapists, getTherapistById};
+module.exports={addTherapist, getAllTherapists, getTherapistById, uploadTherapistPhoto};

@@ -39,4 +39,22 @@ const deleteResource =async(req,res)=>{
     }
 }
 
-module.exports={addResource, getAllResources, deleteResource};
+const uploadResourceImage = async (req, res) => {
+    try {
+        if(!req.file){
+            return res.status(400).json(responseModel({statusCode: 400, success: false, message: 'No file uploaded'}));
+        }
+        const imagePath = `/uploads/${req.file.filename}`;
+        const resource = await Resource.findByIdAndUpdate(
+            req.params.id,
+            {image: imagePath},
+            {new: true}
+        );
+        res.status(200).json(responseModel({statusCode: 200, success: true, data: resource, message: 'Image uploaded successfully!'}));
+    } catch(err) {
+        res.status(400).json(responseModel({statusCode: 400, success: false, message: err.message}));
+    }
+};
+
+module.exports = {addResource, getAllResources, deleteResource, uploadResourceImage};
+

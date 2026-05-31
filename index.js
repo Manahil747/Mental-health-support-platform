@@ -1,31 +1,44 @@
 const express = require("express");
 const dotenv = require('dotenv');
 dotenv.config();
-const app = express();
-app.use(express.json());
-
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+
+const app = express();
+
+// CORS pehle lagao
 app.use(cors({
-    origin: 'http://localhost:5173', // Vite ka default port
+    origin: 'http://localhost:5173',
     credentials: true
 }));
 
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-app.use(helmet()); 
+app.use(express.json());
 
-// 15 minute mein max 1000 requests
+// Uploads folder
+app.use('/uploads', (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+}, express.static('uploads'));
+
+// Helmet - crossOriginResourcePolicy disable karo
+app.use(helmet({
+    crossOriginResourcePolicy: false
+}));
+
+// Rate Limit
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 15 * 60 * 1000,
     max: 1000,
-    message: 'Too many requests, please try again later'
+    message: 'Too many requests'
 });
+app.use(limiter);
 
-// FIX: Purani empty rateLimit() line delete kar ke sahi limiter lagaya:
-app.use(limiter); 
-
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 const connectDB = require('./config/db');
+
+connectDB();
+
 const auth = require('./routes/authRoutes');
 const user = require('./routes/userRoutes');
 const mood = require('./routes/moodRoutes');
@@ -35,8 +48,6 @@ const therapist = require("./routes/therapistRoutes");
 const resource = require("./routes/resourceRoutes");
 const chatAI = require("./routes/chatRoutes");
 const dashboard = require("./routes/dashboardRoutes");
-
-connectDB();
 
 app.use("/auth", auth);
 app.use('/user', user);
